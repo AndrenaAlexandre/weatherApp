@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheather or Not</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel= "stylesheet" href="css/api.css">
+</head>
+<body>
+    
+<script src="js/api.js"></script>    
+
+    <div class="bg" id="background">
+        <section class="top-banner">
+            <div class="container">
+                <h3>Weather Or Not</h3>
+              <!-- <h1 class="heading"> Weather hAppens</h1> -->
+            <form>
+                <input type="text" placeholder="Enter a city name" autofocus>
+                <button type="submit">SEARCH</button>
+                <span class="msg"></span>
+            </form>
+                </div>
+        </section>
+          <section class="ajax-section">
+            <div class="container">
+              <ul class="cities"></ul>
+            </div>
+          </section>
+        
+        <div class="div1" id="day1info"></div>
+        <div class="div1" id="day2info"></div>
+        <!-- <div class="div1" id="day3info"></div> -->
+    </div>
+</div>
+
+    <script>
+        // // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+        // // api.openweathermap.org/data/2.5/weather?q={city name},{state code}&appid={API key}
+
+        // // figure out a way to get a message box that the user wants to input. set that to a global variable and then use that ariable to insert it into where
+        // // city location isin the address
+        // let userInput = prompt("Please enter city name: ");
+
+        const form = document.querySelector(".top-banner form");
+        const input = document.querySelector(".top-banner input");
+        const button = document.querySelector(".top-banner button")
+        var inputVal = "";
+
+        function displayWeather(){
+            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}`)
+            .then(response => response.json())
+            .then(data =>{
+                console.log(data)
+                let kelvin = data.main.temp;
+                let degC = Math.floor(kelvin - 273.15);
+                let degF = Math.floor(degC * 1.8 + 32);
+                let div = document.getElementById('day1info');
+                div.textContent = `Today ${inputVal} is ${degF.toString()}`
+
+
+                let fkelvin = data.main.feels_like;
+                let fdegC = Math.floor(fkelvin - 273.15);
+                let fdegF = Math.floor(fdegC * 1.8 + 32);
+                let fdiv = document.getElementById('day2info');
+                fdiv.textContent = `Feels like ${fdegF.toString()}`
+
+                if(degF > 60){
+                    var weatherImage = document.createElement('img');
+                    weatherImage.setAttribute("src", "images/giphy.gif");
+                    weatherImage.width="100";
+                    weatherImage.height="100";
+                    var imageHolder = document.getElementById('day1info');
+                    imageHolder.append(weatherImage);    
+                }
+                
+                if(degF <= 60){
+                    var weatherImage = document.createElement('img');
+                    weatherImage.setAttribute("src", "images/cold.png");
+                    weatherImage.width="170";
+                    weatherImage.height="100";
+                    var imageHolder = document.getElementById('day1info');
+                    imageHolder.append(weatherImage)
+                }
+            })
+        }
+
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            inputVal = input.value;
+            console.log(inputVal)
+            displayWeather();
+        })
+        // button.addEventListener('click', e => {
+        // displayWeather();
+        // })
+        
+        // // 
+        //     
+            
+    </script>
+    <script src="https://kit.fontawesome.com/55c688daf9.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<footer>
+    
+</footer>
+</body>
+</html>
